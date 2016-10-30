@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}OCRDocs{% endblock %}
+{% block content %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+{% for category, message in get_flashed_messages(with_categories=true) %}
+<div class="alert alert-{{ category }}">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ message }}
+</div>
+{% endfor %}
+  <h1 class="page-header">Current ocrdocs</h2>
+  <a href="{{ url_for('ocrdocs_form') }}"><button type="button" class="btn btn-primary">Add</button></a>
+  <a href="{{ url_for('ocrdocs_recognize') }}"><button type="button" class="btn btn-primary">Recognize</button></a>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Edit</th>
+          <th>Delete</th>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Image</th>
+          <th>FileAttributes</th>
+          <th>Fiels</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for it in data['ocrdocs'] %}
+        <tr>
+          <td><a href="/edit/{{ it.id }}"><img src="/static/images/edit-icon.png"></a></td>
+          <td><a href="/delete/{{ it.id }}"><img src="/static/images/delete-icon.png"></a></td>
+          <td>{{ it.id }}</td>
+          <td>{{ it.status }}</td>
+          <td><img src="/static/storage/{{ it.filename }}" width="100" height="100"></td>
+          <td style="word-wrap: break-word; width=100px;">name={{ it.filename | wordwrap(width=40) }}<br>size={{ it.filesize }}</td>
+          <td style="word-wrap: break-word;">{{ it.fields.decode('utf-8') | wordwrap(width=40) }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}OCRDocEdit{% endblock %}
+{% block content %}
+<div class="col-md-10 col-md-offset-2 main">
+{% for category, message in get_flashed_messages(with_categories=true) %}
+<div class="alert alert-{{ category }}">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ message }}
+</div>
+{% endfor %}
+<h1 class="page-header">Edit doc</h1>
+    <form class=add-entry action="{{ url_for('ocrdocs_update', ocr_id=data['ocrdocs'].id) }}"
+          method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <input type="filename" name="filename"
+                   readonly="true" value={{ data['ocrdocs'].filename }}
+                   size="100"><br /><br />
+            <select name="status">
+            {% for item in data['statuses'] %}
+                <option  value="{{item}}"
+                         {% if data['ocrdocs'].status==item %}
+                           selected="selected"
+                         {% endif %}>
+                    {{item}}
+                </option>
+            {% endfor %}
+            </select><br /><br />
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</div>
+{% endblock %}
